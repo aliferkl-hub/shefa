@@ -15,6 +15,35 @@ async function startServer() {
 
   app.use(express.json());
 
+  // Restricted CORS middleware: allows authorized AI Studio Preview and App domains
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    const isAllowedOrigin = (orig: string): boolean => {
+      if (!orig) return true;
+      if (orig.includes('localhost') || orig.includes('127.0.0.1')) return true;
+      if (orig.endsWith('.run.app')) return true;
+      if (orig.endsWith('.google.com') || orig.endsWith('.aistudio.google.com')) return true;
+      if (process.env.APP_URL && orig === process.env.APP_URL) return true;
+      return false;
+    };
+
+    if (origin && isAllowedOrigin(origin)) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Vary', 'Origin');
+    } else if (!origin) {
+      // Same-origin, direct API calls, curl, or server-to-server
+      res.header('Access-Control-Allow-Origin', '*');
+    }
+
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-shefa-webhook-secret');
+    
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
   // Mount API routes
   app.use('/api', apiRouter);
 

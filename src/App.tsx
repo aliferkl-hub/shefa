@@ -18,44 +18,49 @@ import {
   LivingCoreVisualState
 } from './types/index.ts';
 import { api } from './services/api.ts';
-import { CinematicIntro } from './components/CinematicIntro.tsx';
-import { TopBar } from './components/TopBar.tsx';
+import { livingAudio } from './services/livingAudio.ts';
+import { StudioSidebar, MainNavSection } from './components/navigation/StudioSidebar.tsx';
+import { ObservatoryStudioHome } from './components/observatory/ObservatoryStudioHome.tsx';
 import { Observatory3D } from './components/observatory/Observatory3D.tsx';
 import { AyinCoreTerminal } from './components/AyinCoreTerminal.tsx';
-import { DepartmentsHub } from './components/departments/DepartmentsHub.tsx';
-import { ClientPortalView } from './components/client/ClientPortalView.tsx';
-import { MasterOwnerPanel } from './components/admin/MasterOwnerPanel.tsx';
+import { DigitalStudioView } from './components/departments/DigitalStudioView.tsx';
 import { SubscriptionEngineView } from './components/business/SubscriptionEngineView.tsx';
+import { ProjectsManagementView } from './components/projects/ProjectsManagementView.tsx';
+import { ClientPortalView } from './components/client/ClientPortalView.tsx';
+import { CommercialCrmView } from './components/commercial/CommercialCrmView.tsx';
+import { FinanceView } from './components/finance/FinanceView.tsx';
+import { AgentsHubView } from './components/departments/AgentsHubView.tsx';
+import { CreativeStudioView } from './components/creative/CreativeStudioView.tsx';
+import { SettingsView } from './components/settings/SettingsView.tsx';
+import { MasterOwnerPanel } from './components/admin/MasterOwnerPanel.tsx';
 import { AuthModal } from './components/AuthModal.tsx';
 import { 
+  Menu, 
   Eye, 
   Sparkles, 
   ShieldCheck, 
-  Cpu, 
-  Activity, 
-  Layers, 
-  ArrowUpRight,
-  History,
-  Building2,
-  Lock,
-  Power,
-  AlertTriangle
+  Power, 
+  Maximize2, 
+  Minimize2, 
+  Activity,
+  Layers,
+  ChevronRight,
+  Cpu
 } from 'lucide-react';
 
 export default function App() {
-  // Navigation & View State
-  const [hasEnteredIntro, setHasEnteredIntro] = useState<boolean>(() => {
-    return sessionStorage.getItem('shefa_entered') === 'true';
-  });
-  const [currentView, setCurrentView] = useState<'observatory' | 'core' | 'departments' | 'companies' | 'audit' | 'subscriptions'>('observatory');
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState<DepartmentId>('AYIN_RADAR');
+  // Navigation & Active Section
+  const [currentSection, setCurrentSection] = useState<MainNavSection>('OBSERVATORY');
+  const [isSidebarMobileOpen, setIsSidebarMobileOpen] = useState(false);
+  const [show3DObservatory, setShow3DObservatory] = useState(false);
+  const [isTotalFocus, setIsTotalFocus] = useState(false);
   const [isMasterPanelOpen, setIsMasterPanelOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isTotalFocus, setIsTotalFocus] = useState(false);
 
   // Core Data States
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentCompany, setCurrentCompany] = useState<Company | null>(null);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [departments, setDepartments] = useState<DepartmentInfo[]>([]);
   const [agents, setAgents] = useState<AutonomousAgent[]>([]);
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -70,53 +75,18 @@ export default function App() {
   const [governance, setGovernance] = useState<EngineGovernanceSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Compute the 10 authentic visual states for AYIN CORE
-  const computeLivingState = (): LivingCoreVisualState => {
-    if (stats?.isEmergencyPaused || governance?.isEmergencyPaused) {
-      return 'PAUSADO';
-    }
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      return 'DESCONECTADO';
-    }
-    const recentFailed = missions.find(
-      m => m.status === 'failed' && (Date.now() - new Date(m.updatedAt || m.createdAt).getTime()) < 300000
-    );
-    if (recentFailed) {
-      return 'ERRO';
-    }
-    if (missions.some(m => m.status === 'awaiting_approval')) {
-      return 'AGUARDANDO_APROVACAO';
-    }
-    if (stats && stats.totalCosts && governance?.financialSpendingLimit && stats.totalCosts > governance.financialSpendingLimit) {
-      return 'ALERTA';
-    }
-    if (missions.some(m => m.status === 'in_progress')) {
-      return 'EXECUTANDO';
-    }
-    if (agents.some(a => a.status === 'analyzing')) {
-      return 'ANALISANDO';
-    }
-    if (isLoading) {
-      return 'INICIALIZANDO';
-    }
-    return 'ONLINE';
-  };
-
-  const livingState = computeLivingState();
-
-  // Initial authentication check & auto-login as Master Owner if token or first run
+  // Initial Authentication (Transparently logs in as Master Owner if not yet authenticated)
   const fetchAuth = useCallback(async () => {
     try {
       const res = await api.getMe();
       setCurrentUser(res.user);
       if (res.company) setCurrentCompany(res.company);
     } catch {
-      // If no valid session, auto-login with Master Owner default credentials for seamless experience
       try {
         const loginRes = await api.login('Alifermadeiro@hotmail.com', 'ShefaAyin2026!');
         setCurrentUser(loginRes.user);
       } catch (err) {
-        console.warn('Initial session check:', err);
+        console.warn('Auto-auth warning:', err);
       }
     }
   }, []);
@@ -135,7 +105,8 @@ export default function App() {
         statsRes,
         plansRes,
         subsRes,
-        govRes
+        govRes,
+        compsRes
       ] = await Promise.all([
         api.getDepartments().catch(() => []),
         api.getAgents().catch(() => []),
@@ -147,7 +118,8 @@ export default function App() {
         api.getSystemStats().catch(() => null),
         api.getPlans().catch(() => []),
         api.getSubscriptions().catch(() => []),
-        api.getGovernance().catch(() => null)
+        api.getGovernance().catch(() => null),
+        api.getCompanies().catch(() => [])
       ]);
 
       setDepartments(deptsRes);
@@ -161,24 +133,15 @@ export default function App() {
       setPlans(plansRes);
       setSubscriptions(subsRes);
       setGovernance(govRes);
+      setCompanies(compsRes);
+      if (compsRes.length > 0 && !currentCompany) {
+        setCurrentCompany(compsRes[0]);
+      }
 
-      // Load audit logs if Master Owner
       try {
         const auditRes = await api.getAuditLogs();
         setAuditLogs(auditRes);
-      } catch {
-        // Not master owner or restricted
-      }
-
-      // Load companies
-      try {
-        const comps = await api.getCompanies();
-        if (comps.length > 0 && !currentCompany) {
-          setCurrentCompany(comps[0]);
-        }
-      } catch {
-        // ignore
-      }
+      } catch {}
     } catch (err) {
       console.error('Data load error:', err);
     } finally {
@@ -192,7 +155,7 @@ export default function App() {
     });
   }, [fetchAuth, loadAllData]);
 
-  // Periodic polling to receive continuous background 24/7 worker progress
+  // Periodic polling for continuous 24/7 background telemetry
   useEffect(() => {
     const timer = setInterval(() => {
       loadAllData();
@@ -200,369 +163,287 @@ export default function App() {
     return () => clearInterval(timer);
   }, [loadAllData]);
 
-  const handleEnterObservatory = () => {
-    sessionStorage.setItem('shefa_entered', 'true');
-    setHasEnteredIntro(true);
-  };
-
-  const handleSelectDepartment = (deptId: DepartmentId) => {
-    setSelectedDepartmentId(deptId);
-    setCurrentView('departments');
-  };
-
-  const handleFocusCore = () => {
-    setCurrentView('core');
-  };
-
   const handleLogout = async () => {
     await api.logout();
     setCurrentUser(null);
-    setCurrentCompany(null);
     setIsAuthModalOpen(true);
   };
 
-  if (!hasEnteredIntro) {
-    return (
-      <CinematicIntro 
-        onEnter={handleEnterObservatory} 
-        masterEmail="Alifermadeiro@hotmail.com" 
-      />
-    );
-  }
+  // Compute 10 Authentic Visual States for Three.js Neural Core
+  const computeLivingState = (): LivingCoreVisualState => {
+    if (stats?.isEmergencyPaused || governance?.isEmergencyPaused) return 'PAUSADO';
+    if (typeof navigator !== 'undefined' && !navigator.onLine) return 'DESCONECTADO';
+    if (missions.some(m => m.status === 'awaiting_approval')) return 'AGUARDANDO_APROVACAO';
+    if (missions.some(m => m.status === 'in_progress')) return 'EXECUTANDO';
+    if (agents.some(a => a.status === 'analyzing')) return 'ANALISANDO';
+    if (isLoading) return 'INICIALIZANDO';
+    return 'ONLINE';
+  };
+
+  const livingState = computeLivingState();
+
+  const handleSelectSection = (section: MainNavSection) => {
+    if (section === 'MASTER_OWNER') {
+      setIsMasterPanelOpen(true);
+    } else {
+      setCurrentSection(section);
+      setShow3DObservatory(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#050508] text-slate-100 flex flex-col font-sans selection:bg-purple-900 selection:text-amber-200">
-      {/* Top Bar with 3-Zone Contract (concealed in Total Focus Mode for total immersion) */}
+    <div className="min-h-screen bg-[#121024] text-slate-100 flex font-sans selection:bg-[#8B5CF6]/40 selection:text-white">
+      {/* 1. PREMIUM SIDEBAR MENU (12 SECTIONS) */}
       {!isTotalFocus && (
-        <TopBar
-          currentView={currentView}
-          onNavigate={setCurrentView}
+        <StudioSidebar
+          currentSection={currentSection}
+          onSelectSection={handleSelectSection}
           currentUser={currentUser}
-          currentCompany={currentCompany}
-          onOpenMasterPanel={() => setIsMasterPanelOpen(true)}
-          onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
-          onToggleTotalFocus={() => setIsTotalFocus(true)}
+          isOpenMobile={isSidebarMobileOpen}
+          onToggleMobile={() => setIsSidebarMobileOpen(prev => !prev)}
         />
       )}
 
-      {/* Main Viewport Container */}
-      <main className={`flex-1 w-full mx-auto space-y-8 ${isTotalFocus ? 'p-0 max-w-none' : 'max-w-[1440px] px-4 sm:px-6 py-6'}`}>
-        
-        {/* Emergency Kill-Switch Global Banner when Paused */}
-        {(stats?.isEmergencyPaused || governance?.isEmergencyPaused) && (
-          <div className="p-4 bg-rose-950/80 border border-rose-500/60 rounded-2xl text-rose-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xl shadow-rose-950/40">
+      {/* 2. MAIN WORKSPACE CONTENT AREA */}
+      <div className={`flex-1 flex flex-col min-w-0 transition-all ${!isTotalFocus ? 'lg:pl-72' : ''}`}>
+        {/* Global Top Navbar */}
+        {!isTotalFocus && (
+          <header className="sticky top-0 z-30 h-16 bg-[#17142B]/90 backdrop-blur-md border-b border-[#8B5CF6]/20 px-4 sm:px-8 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-rose-900/60 flex items-center justify-center text-rose-400 shrink-0">
-                <Power className="w-4 h-4 animate-pulse" />
-              </div>
-              <div>
-                <span className="font-bold text-white block">
-                  PAUSA GERAL DE EMERGÊNCIA ATIVA (KILL-SWITCH ACIONADO)
-                </span>
-                <span className="text-[11px] text-rose-300 font-light">
-                  Todos os loops autônomos, disparos de cobrança e execuções de agentes estão suspensos no servidor.
-                </span>
-              </div>
-            </div>
-            {currentUser?.role === 'MASTER_OWNER' && (
               <button
-                onClick={() => setIsMasterPanelOpen(true)}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer shrink-0"
+                onClick={() => setIsSidebarMobileOpen(true)}
+                className="p-2 rounded-lg text-slate-400 hover:text-white lg:hidden cursor-pointer"
               >
-                Gerenciar Soberania
+                <Menu className="w-5 h-5" />
               </button>
-            )}
+
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="text-slate-400">SHEFA AYIN STUDIO</span>
+                <span className="text-[#8B5CF6]">/</span>
+                <span className="text-white font-bold">{currentSection.replace('_', ' ')}</span>
+              </div>
+            </div>
+
+            {/* Top Right Actions */}
+            <div className="flex items-center gap-3">
+              {currentSection === 'OBSERVATORY' && (
+                <button
+                  onClick={() => {
+                    livingAudio.playTone('click');
+                    setShow3DObservatory(prev => !prev);
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1D1835] hover:bg-[#8B5CF6]/30 border border-[#8B5CF6]/30 text-[#A78BFA] hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Eye className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{show3DObservatory ? 'Visão Painel' : 'Visão 3D Neural'}</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  livingAudio.playTone('click');
+                  setIsTotalFocus(prev => !prev);
+                }}
+                title="Modo Foco Total"
+                className="p-2 rounded-lg bg-[#1D1835] hover:bg-[#8B5CF6]/30 border border-[#8B5CF6]/25 text-[#A78BFA] hover:text-white transition-colors cursor-pointer"
+              >
+                {isTotalFocus ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </button>
+
+              {currentUser?.role === 'MASTER_OWNER' && (
+                <button
+                  onClick={() => {
+                    livingAudio.playTone('click');
+                    setIsMasterPanelOpen(true);
+                  }}
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-950/40 hover:bg-amber-900/50 border border-amber-500/40 text-amber-300 flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Master Owner</span>
+                </button>
+              )}
+            </div>
+          </header>
+        )}
+
+        {/* Global Emergency Banner if System is Paused */}
+        {(stats?.isEmergencyPaused || governance?.isEmergencyPaused) && (
+          <div className="m-4 p-4 bg-rose-950/90 border border-rose-500/60 rounded-2xl text-rose-200 text-xs flex items-center justify-between gap-3 shadow-xl">
+            <div className="flex items-center gap-3">
+              <Power className="w-5 h-5 text-rose-400 animate-pulse" />
+              <div>
+                <strong className="text-white block">PAUSA GERAL DE EMERGÊNCIA ATIVA</strong>
+                <span>Todos os loops autônomos e cobranças estão suspensos no servidor pelo Master Owner.</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsMasterPanelOpen(true)}
+              className="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold cursor-pointer"
+            >
+              Gerenciar
+            </button>
           </div>
         )}
 
-        {/* Status Strip & Real Aggregate Metrics (Concealed in Total Focus Mode) */}
-        {stats && !isTotalFocus && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Departamentos</span>
-              <div className="text-base font-bold font-mono-numbers text-white">8 Ativos</div>
-              <span className="text-[10px] text-purple-300">Constelação completa</span>
-            </div>
-
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Agentes 24/7</span>
-              <div className="text-base font-bold font-mono-numbers text-amber-400">
-                {stats.active24hAgents} / {stats.totalAgents}
+        {/* Dynamic Section Renderer */}
+        <main className={`flex-1 p-4 sm:p-8 ${isTotalFocus ? 'max-w-none p-0' : 'max-w-7xl w-full mx-auto'}`}>
+          {/* 1. OBSERVATORY: The New Flagship Home Page */}
+          {currentSection === 'OBSERVATORY' && (
+            show3DObservatory ? (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center pb-2">
+                  <h3 className="text-sm font-cinzel font-bold text-white">Observatório Tridimensional AYIN CORE</h3>
+                  <button
+                    onClick={() => setShow3DObservatory(false)}
+                    className="text-xs text-[#A78BFA] hover:text-white cursor-pointer"
+                  >
+                    Voltar ao Painel Geral
+                  </button>
+                </div>
+                <Observatory3D
+                  departments={departments}
+                  agents={agents}
+                  missions={missions}
+                  livingState={livingState}
+                  selectedDepartmentId="AYIN_RADAR"
+                  onSelectDepartment={() => {}}
+                  onSelectAgent={() => {}}
+                  onFocusCore={() => setCurrentSection('AI_CORE')}
+                  isTotalFocus={isTotalFocus}
+                  onToggleTotalFocus={() => setIsTotalFocus(prev => !prev)}
+                  onSendCommand={async (cmd: string) => {
+                    await api.sendCommand(cmd);
+                    loadAllData();
+                  }}
+                  currentUser={currentUser}
+                  onToggleAgentPause={async (id: string) => {
+                    await api.toggleAgentPause(id);
+                    loadAllData();
+                  }}
+                  onTriggerKillSwitch={async () => {
+                    await api.toggleEmergencyPause();
+                    loadAllData();
+                  }}
+                />
               </div>
-              <span className="text-[10px] text-slate-400">Motor contínuo no server</span>
-            </div>
+            ) : (
+              <ObservatoryStudioHome
+                currentUser={currentUser}
+                companies={companies}
+                departments={departments}
+                agents={agents}
+                missions={missions}
+                leads={leads}
+                products={products}
+                finances={finances}
+                stats={stats}
+                plans={plans}
+                onNavigateSection={handleSelectSection}
+                onRefreshData={loadAllData}
+                onOpenMasterPanel={() => setIsMasterPanelOpen(true)}
+              />
+            )
+          )}
 
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Missões Cumpridas</span>
-              <div className="text-base font-bold font-mono-numbers text-emerald-400">
-                {stats.completedMissions} / {stats.totalMissions}
-              </div>
-              <span className="text-[10px] text-slate-400">Execução persistida</span>
-            </div>
+          {/* 2. DIGITAL: Desenvolvimento de Sistemas para Clientes */}
+          {currentSection === 'DIGITAL' && (
+            <DigitalStudioView
+              currentUser={currentUser}
+              leads={leads}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Trava Sensível</span>
-              <div className="text-base font-bold font-mono-numbers text-amber-300">
-                {stats.awaitingApproval} Pendente
-              </div>
-              <span className="text-[10px] text-slate-400">Aprovação Master</span>
-            </div>
+          {/* 3. LABS: Produtos Próprios & Assinaturas */}
+          {currentSection === 'LABS' && (
+            <SubscriptionEngineView
+              plans={plans}
+              subscriptions={subscriptions}
+              currentUser={currentUser}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Empresas Clientes</span>
-              <div className="text-base font-bold font-mono-numbers text-white">
-                {stats.totalCompanies} Isoladas
-              </div>
-              <span className="text-[10px] text-slate-400">Multitenant hermético</span>
-            </div>
+          {/* 4. PROJECTS: Gerenciamento de Projetos */}
+          {currentSection === 'PROJECTS' && (
+            <ProjectsManagementView />
+          )}
 
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Receita Líquida</span>
-              <div className="text-base font-bold font-mono-numbers text-emerald-400">
-                {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(stats.grossRevenue || 0)}
-              </div>
-              <span className="text-[10px] text-slate-400">Pix oficial liquidado</span>
-            </div>
+          {/* 5. CLIENTS: Cadastro e Relacionamento com Clientes */}
+          {currentSection === 'CLIENTS' && (
+            <ClientPortalView
+              companies={companies}
+              currentUser={currentUser}
+              currentCompany={currentCompany}
+              onSelectCompany={setCurrentCompany}
+              leads={leads}
+              knowledge={knowledge}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">MRR Vigente</span>
-              <div className="text-base font-bold font-mono-numbers text-amber-300">
-                {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(stats.mrr || 0)}
-              </div>
-              <span className="text-[10px] text-slate-400">{stats.activeSubscriptions || 0} assinaturas ativas</span>
-            </div>
+          {/* 6. COMMERCIAL: Leads, Propostas e Vendas */}
+          {currentSection === 'COMMERCIAL' && (
+            <CommercialCrmView
+              leads={leads}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-            <div className="p-3.5 glass-obsidian rounded-xl border border-purple-900/20">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 block mb-0.5">Auditoria SHA-256</span>
-              <div className="text-base font-bold font-mono-numbers text-purple-300">
-                {stats.auditEntries} Logs
-              </div>
-              <span className="text-[10px] text-slate-400">Cadeia criptográfica</span>
-            </div>
-          </div>
-        )}
+          {/* 7. FINANCE: Receitas e Despesas */}
+          {currentSection === 'FINANCE' && (
+            <FinanceView
+              finances={finances}
+              stats={stats}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-        {/* VIEW 1: OBSERVATÓRIO 3D */}
-        {currentView === 'observatory' && (
-          <div className="space-y-6">
-            {/* The 3D Three.js Living Intelligence Observatory */}
-            <Observatory3D
-              departments={departments}
+          {/* 8. AI CORE: Núcleo de Inteligência AYIN CORE Preservado */}
+          {currentSection === 'AI_CORE' && (
+            <AyinCoreTerminal
+              currentUser={currentUser}
+              missions={missions}
+              onMissionCreated={(newMission) => {
+                setMissions(prev => [newMission, ...prev]);
+                loadAllData();
+              }}
+              onSelectDepartment={() => {}}
+            />
+          )}
+
+          {/* 9. AI AGENTS: Gerenciamento dos 11 Agentes */}
+          {currentSection === 'AI_AGENTS' && (
+            <AgentsHubView
               agents={agents}
               missions={missions}
-              livingState={livingState}
-              selectedDepartmentId={selectedDepartmentId}
-              onSelectDepartment={handleSelectDepartment}
-              onSelectAgent={(agent) => {
-                // Focus corresponding department
-                if (agent.departmentId) {
-                  setSelectedDepartmentId(agent.departmentId);
-                }
-              }}
-              onFocusCore={handleFocusCore}
-              isTotalFocus={isTotalFocus}
-              onToggleTotalFocus={() => setIsTotalFocus(prev => !prev)}
-              onSendCommand={async (cmd: string) => {
-                await api.sendCommand(cmd);
-                loadAllData();
-              }}
               currentUser={currentUser}
-              onToggleAgentPause={async (agentId: string) => {
-                await api.toggleAgentPause(agentId);
-                loadAllData();
-              }}
-              onTriggerKillSwitch={async () => {
-                await api.toggleEmergencyPause();
-                loadAllData();
-              }}
+              onRefreshData={loadAllData}
             />
+          )}
 
-            {/* Sub-view: Quick Department Selector Cards & Live Signals (concealed when in Total Focus) */}
-            {!isTotalFocus && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-3 p-6 glass-obsidian rounded-2xl border border-purple-900/30 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-purple-900/20">
-                    <div className="flex items-center gap-2">
-                      <Layers className="w-4 h-4 text-amber-400" />
-                      <h3 className="text-sm font-semibold text-white">
-                        Constelação dos 8 Departamentos Independentes
-                      </h3>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
-                      <span>Clique em um departamento para inspecionar</span>
-                      <span aria-hidden="true">·</span>
-                      <button
-                        onClick={() => setIsTotalFocus(true)}
-                        className="text-amber-400 hover:text-amber-300 font-medium underline underline-offset-2 cursor-pointer"
-                      >
-                        Ativar Foco Total [F]
-                      </button>
-                    </div>
-                  </div>
+          {/* 10. CREATIVE STUDIO: Criação & Identidade Visual */}
+          {currentSection === 'CREATIVE_STUDIO' && (
+            <CreativeStudioView />
+          )}
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {departments.map((dept) => (
-                    <button
-                      key={dept.id}
-                      onClick={() => handleSelectDepartment(dept.id)}
-                      className="p-3 glass-obsidian rounded-xl border border-purple-900/20 hover:border-purple-500/40 text-left transition-all hover:scale-[1.02] cursor-pointer group"
-                    >
-                      <span className="text-xs font-semibold text-white block group-hover:text-amber-300 transition-colors">
-                        {dept.name}
-                      </span>
-                      <span className="text-[10px] font-cinzel text-amber-300/80 block mb-1">
-                        {dept.hebrewName}
-                      </span>
-                      <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono-numbers pt-1 border-t border-purple-900/10">
-                        <span>{dept.activeAgentsCount} Agentes</span>
-                        <ArrowUpRight className="w-3 h-3 text-slate-500 group-hover:text-amber-400" />
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+          {/* 11. SETTINGS: Configurações */}
+          {currentSection === 'SETTINGS' && (
+            <SettingsView
+              governance={governance}
+              onRefreshData={loadAllData}
+            />
+          )}
+        </main>
+      </div>
 
-              {/* Master Security Status Widget */}
-              <div className="p-6 glass-obsidian-gold rounded-2xl border border-amber-500/30 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-amber-400" />
-                    <h4 className="text-xs font-semibold text-amber-300 uppercase tracking-wider">
-                      Soberania Master Owner
-                    </h4>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed font-light">
-                    O Master Owner ({currentUser?.email || 'Alifermadeiro@hotmail.com'}) possui controle integral sobre agentes, orçamentos e ambientes de clientes.
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-amber-500/20 space-y-2">
-                  <button
-                    onClick={() => setIsMasterPanelOpen(true)}
-                    className="w-full py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white rounded-lg text-xs font-medium transition-all cursor-pointer shadow"
-                  >
-                    Abrir Console Global
-                  </button>
-                  <button
-                    onClick={() => setCurrentView('core')}
-                    className="w-full py-2 glass-obsidian text-slate-300 hover:text-white rounded-lg text-xs font-medium transition-colors cursor-pointer"
-                  >
-                    Despachar Comando AYIN
-                  </button>
-                </div>
-              </div>
-            </div>
-            )}
-          </div>
-        )}
-
-        {/* VIEW 2: AYIN CORE COMMAND TERMINAL */}
-        {currentView === 'core' && (
-          <AyinCoreTerminal
-            currentUser={currentUser}
-            missions={missions}
-            onMissionCreated={(newMission) => {
-              setMissions(prev => [newMission, ...prev]);
-              loadAllData();
-            }}
-            onSelectDepartment={handleSelectDepartment}
-          />
-        )}
-
-        {/* VIEW 3: 8 SPECIALIZED DEPARTMENTS */}
-        {currentView === 'departments' && (
-          <DepartmentsHub
-            departments={departments}
-            agents={agents}
-            missions={missions}
-            leads={leads}
-            products={products}
-            finances={finances}
-            knowledge={knowledge}
-            currentUser={currentUser}
-            selectedDepartmentId={selectedDepartmentId}
-            onSelectDepartment={setSelectedDepartmentId}
-            onRefreshData={loadAllData}
-          />
-        )}
-
-        {/* VIEW 4: SUBSCRIPTION & BUSINESS ENGINE */}
-        {currentView === 'subscriptions' && (
-          <SubscriptionEngineView
-            plans={plans}
-            subscriptions={subscriptions}
-            currentUser={currentUser}
-            onRefreshData={loadAllData}
-          />
-        )}
-
-        {/* VIEW 5: CLIENT COMPANIES ENVIRONMENT (MULTI-TENANT) */}
-        {currentView === 'companies' && (
-          <ClientPortalView
-            companies={currentCompany ? [currentCompany] : []}
-            currentUser={currentUser}
-            currentCompany={currentCompany}
-            onSelectCompany={setCurrentCompany}
-            leads={leads}
-            knowledge={knowledge}
-            onRefreshData={loadAllData}
-          />
-        )}
-
-        {/* VIEW 6: CRYPTOGRAPHIC AUDIT LOGS */}
-        {currentView === 'audit' && (
-          <div className="w-full max-w-6xl mx-auto p-6 glass-obsidian rounded-2xl border border-purple-900/30 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-purple-900/20">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-amber-400">
-                  <History className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-cinzel font-bold text-white tracking-wide">
-                    Registro de Auditoria & Soberania Criptográfica
-                  </h2>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Histórico imutável de operações, comandos e aprovações com encadeamento SHA-256 e timestamps certificados.
-                  </p>
-                </div>
-              </div>
-
-              <span className="text-xs font-mono-numbers text-purple-300 glass-obsidian px-3 py-1.5 rounded-lg border border-purple-900/30">
-                {auditLogs.length} Registros Auditados
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {auditLogs.map((log) => (
-                <div
-                  key={log.id}
-                  className="p-4 bg-[#07070d]/80 rounded-xl border border-purple-900/20 space-y-2 hover:border-purple-600/40 transition-colors"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
-                    <span className="font-semibold text-amber-300 font-mono-numbers">{log.action}</span>
-                    <span className="text-slate-400 font-mono-numbers">
-                      {new Date(log.timestamp).toLocaleString('pt-BR')}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-200 leading-relaxed font-light">{log.details}</p>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-purple-900/10 text-[11px] text-slate-500 font-mono-numbers">
-                    <span>Ator: {log.actorEmail} ({log.actorRole}) · Tenant: {log.companyId}</span>
-                    <span className="truncate max-w-sm" title={log.hash}>Hash SHA-256: {log.hash}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </main>
-
-      {/* Master Owner Management Modal */}
+      {/* MASTER OWNER CONSOLE MODAL */}
       {isMasterPanelOpen && (
         <MasterOwnerPanel
           currentUser={currentUser}
           missions={missions}
-          companies={currentCompany ? [currentCompany] : []}
+          companies={companies}
           auditLogs={auditLogs}
           agents={agents}
           stats={stats}
@@ -571,7 +452,7 @@ export default function App() {
         />
       )}
 
-      {/* Authentication Modal */}
+      {/* AUTH MODAL */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
@@ -580,22 +461,6 @@ export default function App() {
           loadAllData();
         }}
       />
-
-      {/* Persistent Quiet Cosmic Footer (concealed in Total Focus Mode) */}
-      {!isTotalFocus && (
-        <footer className="mt-12 border-t border-purple-900/20 py-6 text-center text-xs text-slate-500 font-light">
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-2">
-            <span className="font-cinzel text-amber-300/80">SHEFA AYIN (עין השפע)</span>
-            <span aria-hidden="true">·</span>
-            <span>The Intelligence Observatory</span>
-            <span aria-hidden="true">·</span>
-            <span>Soberania Master Owner: Alifermadeiro@hotmail.com</span>
-          </div>
-          <p className="text-[11px] text-slate-600">
-            Operação Contínua 24/7 · Blindagem LGPD & Isolamento Multitenant · Núcleo Neural AYIN CORE
-          </p>
-        </footer>
-      )}
     </div>
   );
 }

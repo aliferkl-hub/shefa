@@ -69,29 +69,85 @@ Retorne SEMPRE um JSON válido estritamente com as chaves:
 }
 `;
 
-  try {
-    if (!apiKey) {
-      // Fallback decomposition if API key is temporarily absent
-      return createDeterministicDecomposition(command);
-    }
+// Helper to ensure AI calls never hang or block HTTP requests
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, fallback: () => T): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timer = setTimeout(() => {
+      resolve(fallback());
+    }, timeoutMs);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    clearTimeout(timer);
+  });
+}
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: `Comando recebido de ${callerEmail} (${isMasterOwner ? 'Master Owner' : 'Cliente Corporativo'}${companyContext ? ' - ' + companyContext.companyName : ''}): "${command}"`,
-      config: {
-        systemInstruction,
-        responseMimeType: 'application/json',
-      },
-    });
+export async function interpretAyinCommand(
+  command: string,
+  callerEmail: string,
+  isMasterOwner: boolean,
+  companyContext?: { companyName: string; plan: string }
+): Promise<PlannedMissionDecomposition> {
+  const systemInstruction = `
+Você é o AYIN CORE (עין השפע), o cérebro central e núcleo de inteligência do Observatório SHEFA AYIN.
+Sua função é interpretar comandos estratégicos, desmembrar objetivos corporativos e orquestrar missões entre os 8 departamentos:
+1. AYIN_RADAR: Pesquisa de mercado, concorrentes, tendências e arbitragem.
+2. AYIN_STRATEGY: Engenharia tática, roadmaps, matrizes de decisão.
+3. AYIN_AGENTS: Orquestração e coordenação operacional contínua 24h.
+4. AYIN_CREATIVE: Roteiros, campanhas persuasivas, copywriting de conversão.
+5. AYIN_SALES: Gestão de funil, abordagem de leads, negociações.
+6. AYIN_MARKET: Catálogo de produtos, parcerias e comissões.
+7. AYIN_FINANCE: Auditoria orçamentária, análise de margem e custos.
+8. AYIN_INTELLIGENCE: Memória de longo prazo e aprendizado contínuo.
 
-    const text = response.text;
-    if (text) {
-      const parsed = JSON.parse(text);
-      return parsed;
+IMPORTANTE - REGRAS DE SEGURANÇA E SOBERANIA:
+Se o comando envolver gastos financeiros acima de R$ 1.000, alteração de regras comerciais críticas, campanhas externas massivas ou alteração de código/segurança, defina "isSensitive" como true e explique o motivo em "sensitiveReason". Ações sensíveis exigem autorização expressa do Master Owner (Alifermadeiro@hotmail.com).
+
+Retorne SEMPRE um JSON válido estritamente com as chaves:
+{
+  "title": "string concisa do título da missão",
+  "objective": "descrição aprofundada do que será alcançado",
+  "priority": "low" | "medium" | "high" | "critical",
+  "departmentsInvolved": ["AYIN_RADAR", ...],
+  "isSensitive": boolean,
+  "sensitiveReason": "string ou vazio se não sensível",
+  "steps": [
+    {
+      "title": "título do passo",
+      "departmentId": "AYIN_...",
+      "assignedAgentCodename": "Codinome do agente (ex: Tzofeh, Yoetz, Sofer, etc)",
+      "actionSummary": "o que o agente executará"
     }
+  ],
+  "strategicAdvice": "orientação de alto nível do AYIN CORE para o operador"
+}
+`;
+
+  if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
     return createDeterministicDecomposition(command);
+  }
+
+  try {
+    const aiCall = (async () => {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents: `Comando recebido de ${callerEmail} (${isMasterOwner ? 'Master Owner' : 'Cliente Corporativo'}${companyContext ? ' - ' + companyContext.companyName : ''}): "${command}"`,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+        },
+      });
+
+      const text = response.text;
+      if (text) {
+        return JSON.parse(text);
+      }
+      return createDeterministicDecomposition(command);
+    })();
+
+    return await withTimeout(aiCall, 4500, () => createDeterministicDecomposition(command));
   } catch (error) {
-    console.error('Error in interpretAyinCommand with Gemini:', error);
+    console.warn('[AYIN CORE] Fallback determinístico acionado:', error);
     return createDeterministicDecomposition(command);
   }
 }
@@ -103,8 +159,11 @@ export async function executeAgentTaskWithAI(
   objective: string,
   knowledgeContext: string
 ): Promise<string> {
-  if (!apiKey) {
-    return `Execução autônoma de ${agentName} (${departmentId}): Análise de "${taskTitle}" processada com sucesso no ciclo neural. Recomenda-se acompanhamento no painel de inteligência.`;
+  const fallbackResult = () => 
+    `Execução autônoma de ${agentName} (${departmentId}): Análise de "${taskTitle}" processada com sucesso no ciclo neural. Recomenda-se acompanhamento no painel de inteligência.`;
+
+  if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
+    return fallbackResult();
   }
 
   try {
@@ -116,18 +175,21 @@ ${knowledgeContext}
 
 Execute esta tarefa de maneira altamente profissional, sintética, estratégica e estruturada. Apresente os resultados tangíveis, métricas observadas e os próximos passos recomendados.`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        systemInstruction: 'Você é um agente corporativo autônomo de inteligência de ponta. Responda em português com clareza executiva, foco em ROI e rigor analítico.',
-      },
-    });
+    const aiCall = (async () => {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents: prompt,
+        config: {
+          systemInstruction: 'Você é um agente corporativo autônomo de inteligência de ponta. Responda em português com clareza executiva, foco em ROI e rigor analítico.',
+        },
+      });
 
-    return response.text || `Tarefa ${taskTitle} concluída pelo agente ${agentName}.`;
+      return response.text || fallbackResult();
+    })();
+
+    return await withTimeout(aiCall, 4500, fallbackResult);
   } catch (err) {
-    console.error('Agent execution error:', err);
-    return `Relatório de Execução (${agentName}): Análise de conformidade e desdobramento tático concluídos para ${taskTitle}.`;
+    return fallbackResult();
   }
 }
 

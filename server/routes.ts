@@ -146,7 +146,8 @@ apiRouter.post('/auth/logout', authMiddleware, (req: AuthenticatedRequest, res: 
 // -------------------------------------------------------------
 
 apiRouter.post('/command', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
-  const { prompt, companyId } = req.body;
+  const prompt = req.body.prompt || req.body.command;
+  const companyId = req.body.companyId;
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({ error: 'Comando em texto é obrigatório.' });
   }
@@ -585,6 +586,20 @@ apiRouter.post('/leads', authMiddleware, (req: AuthenticatedRequest, res: Respon
   return res.json(newLead);
 });
 
+apiRouter.put('/leads/:id', authMiddleware, (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const updates = req.body;
+  const data = db.getData();
+  const lead = data.leads.find(l => l.id === id);
+  if (!lead) {
+    return res.status(404).json({ error: 'Lead não encontrado.' });
+  }
+
+  Object.assign(lead, updates, { lastContact: new Date().toISOString() });
+  db.commit();
+  return res.json(lead);
+});
+
 apiRouter.get('/knowledge', authMiddleware, (req: AuthenticatedRequest, res: Response) => {
   const user = req.user!;
   const data = db.getData();
@@ -793,6 +808,47 @@ apiRouter.get('/payments/pix/:id', (req: Request, res: Response) => {
   }
 
   return res.json(charge);
+});
+
+apiRouter.post('/payments/pix/charge', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  const { amount, customerName, customerEmail, customerCpfOrCnpj, planTier } = req.body;
+  const data = db.getData();
+  const txId = `SHF${Date.now().toString().slice(-8)}${Math.random().toString(36).substring(2, 4).toUpperCase()}`;
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 30 * 60 * 1000).toISOString();
+
+  const pixData = await generatePixChargePayload({
+    pixKey: data.governance.pixKey || '11973479473',
+    recipientName: 'Alifer Madeiro',
+    city: 'SAO PAULO',
+    amount: Number(amount),
+    txId
+  });
+
+  const pixChargeId = `pix_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+  const newCharge: PixCharge = {
+    id: pixChargeId,
+    orderId: `direct_${Date.now()}`,
+    companyId: req.user?.companyId || 'global',
+    customerName: customerName || 'Cliente Corporativo',
+    customerEmail: customerEmail || 'cliente@corporativo.com',
+    customerCpfOrCnpj: customerCpfOrCnpj || '',
+    planTier: planTier || 'Infinity Enterprise',
+    amount: Number(amount),
+    pixKey: data.governance.pixKey || '11973479473',
+    pixKeyType: 'TELEFONE CELULAR',
+    recipientName: 'Alifer Madeiro',
+    copyPasteCode: pixData.copyPasteCode,
+    qrCodeSvg: pixData.qrCodeSvg,
+    status: 'PENDING',
+    createdAt: now.toISOString(),
+    expiresAt,
+    txId
+  };
+
+  data.pixCharges.unshift(newCharge);
+  db.commit();
+  return res.json(newCharge);
 });
 
 // Authenticated Pix Webhook endpoint (Banco Central / Instituição Financeira)
@@ -1208,4 +1264,101 @@ apiRouter.get('/system/stats', authMiddleware, (req: AuthenticatedRequest, res: 
     pendingPixCharges: pendingPixCount,
     isEmergencyPaused: data.governance.isEmergencyPaused
   });
+});
+
+// -------------------------------------------------------------
+// CORPORATE PROJECTS MANAGEMENT
+// -------------------------------------------------------------
+
+apiRouter.get('/projects', authMiddleware, (_req: AuthenticatedRequest, res: Response) => {
+  const data = db.getData();
+  return res.json(data.projects || []);
+});
+
+apiRouter.post('/projects', authMiddleware, masterOwnerOnly, (req: AuthenticatedRequest, res: Response) => {
+  const { name, client, category, contractValue, deadline, scope, assignedAgents } = req.body;
+  if (!name || !client) {
+    return res.status(400).json({ error: 'Nome do projeto e cliente são obrigatórios.' });
+  }
+
+  const data = db.getData();
+  const newProject = {
+    id: `proj_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+    name,
+    client,
+    category: category || 'Sistemas Corporativos & IA',
+    contractValue: Number(contractValue) || 0,
+    progress: 0,
+    stage: 'Planejamento' as const,
+    deadline: deadline || 'Em definição',
+    assignedAgents: assignedAgents || ['LEAD', 'SALES', 'FINANCE'],
+    scope: Array.isArray(scope) ? scope : [scope || 'Definição de escopo e arquitetura'],
+    createdAt: new Date().toISOString()
+  };
+
+  data.projects.unshift(newProject);
+  db.commit();
+
+  db.logAudit(
+    req.user!.email,
+    req.user!.role,
+    'PROJECT_CREATED',
+    'global',
+    `Projeto corporativo "${name}" criado para ${client}. Valor contratado: R$ ${newProject.contractValue}.`
+  );
+
+  return res.status(201).json(newProject);
+});
+
+apiRouter.put('/projects/:id', authMiddleware, (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const updates = req.body;
+  const data = db.getData();
+  const project = data.projects.find(p => p.id === id);
+
+  if (!project) {
+    return res.status(404).json({ error: 'Projeto não localizado.' });
+  }
+
+  if (updates.stage) project.stage = updates.stage;
+  if (typeof updates.progress === 'number') project.progress = updates.progress;
+  if (updates.deadline) project.deadline = updates.deadline;
+  if (updates.scope) project.scope = updates.scope;
+  if (updates.assignedAgents) project.assignedAgents = updates.assignedAgents;
+  if (typeof updates.contractValue === 'number') project.contractValue = updates.contractValue;
+
+  db.commit();
+
+  db.logAudit(
+    req.user!.email,
+    req.user!.role,
+    'PROJECT_UPDATED',
+    'global',
+    `Projeto "${project.name}" atualizado. Etapa: ${project.stage}, Progresso: ${project.progress}%.`
+  );
+
+  return res.json(project);
+});
+
+apiRouter.delete('/projects/:id', authMiddleware, masterOwnerOnly, (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const data = db.getData();
+  const idx = data.projects.findIndex(p => p.id === id);
+
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Projeto não localizado.' });
+  }
+
+  const removed = data.projects.splice(idx, 1)[0];
+  db.commit();
+
+  db.logAudit(
+    req.user!.email,
+    req.user!.role,
+    'PROJECT_DELETED',
+    'global',
+    `Projeto "${removed.name}" removido do observatório.`
+  );
+
+  return res.json({ success: true, message: 'Projeto removido com sucesso.' });
 });

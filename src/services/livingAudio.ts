@@ -59,6 +59,10 @@ class LivingAudioService {
   }
 
   // Play procedural harmonic tones
+  public play(type: 'boot' | 'command_sent' | 'state_change' | 'alert' | 'emergency' | 'complete' | 'click') {
+    this.playTone(type);
+  }
+
   public playTone(type: 'boot' | 'command_sent' | 'state_change' | 'alert' | 'emergency' | 'complete' | 'click') {
     if (this.isMuted) return;
     try {

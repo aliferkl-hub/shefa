@@ -16,7 +16,8 @@ import {
   CommissionRecord,
   EngineGovernanceSettings,
   FinancialRecord, 
-  AuditLog 
+  AuditLog,
+  ProjectItem
 } from './types.js';
 
 const DATA_DIR = path.resolve(process.cwd(), 'data');
@@ -39,6 +40,7 @@ export interface DatabaseSchema {
   finances: FinancialRecord[];
   auditLogs: AuditLog[];
   sessions: { token: string; userId: string; expiresAt: string }[];
+  projects: ProjectItem[];
 }
 
 export function hashPassword(password: string, salt?: string): { hash: string; salt: string } {
@@ -129,6 +131,57 @@ export const INITIAL_PLANS: PlanDefinition[] = [
       customAIPersona: true,
       prioritySupport: true
     }
+  }
+];
+
+export const INITIAL_PROJECTS: ProjectItem[] = [
+  {
+    id: 'proj_01',
+    name: 'Vértice Tech Global - ERP Corporativo',
+    client: 'Roberto Alencar (Diretoria Vértice)',
+    category: 'Sistemas Corporativos & ERP',
+    contractValue: 48000,
+    progress: 68,
+    stage: 'Desenvolvimento',
+    deadline: '28/04/2026',
+    assignedAgents: ['LEAD', 'SALES', 'FINANCE'],
+    scope: ['Modelagem PostgreSQL & Schemas', 'API de Conciliação em Tempo Real', 'Dashboard Executivo']
+  },
+  {
+    id: 'proj_02',
+    name: 'Grupo Aurora - Telemedicina & Portal do Paciente',
+    client: 'Carla Silveira (Gestão Aurora)',
+    category: 'Plataforma Web & Telemedicina',
+    contractValue: 34500,
+    progress: 88,
+    stage: 'Homologação',
+    deadline: '15/04/2026',
+    assignedAgents: ['CUSTOMER', 'MARKETING', 'CREATIVE'],
+    scope: ['Portal do Paciente WebRTC', 'Assinatura Digital de Prontuários', 'Blindagem LGPD']
+  },
+  {
+    id: 'proj_03',
+    name: 'Titan Capital - Motor Pix & Liquidação',
+    client: 'Fernando Castilho',
+    category: 'Fintech & Motor Pix',
+    contractValue: 62000,
+    progress: 100,
+    stage: 'Concluído',
+    deadline: 'Entregue',
+    assignedAgents: ['FINANCE', 'RADAR', 'SUBSCRIPTION'],
+    scope: ['Gateway Pix Idempotente', 'Auditoria SHA-256 de Transações', 'Relatórios Fiscais']
+  },
+  {
+    id: 'proj_04',
+    name: 'BioNexus Diagnósticos - Rede Neural de Triagem',
+    client: 'Dra. Márcia Rios',
+    category: 'Inteligência Artificial & Agentes LLM',
+    contractValue: 29000,
+    progress: 25,
+    stage: 'Planejamento',
+    deadline: '20/05/2026',
+    assignedAgents: ['STRATEGY', 'INTELLIGENCE', 'COMPLIANCE'],
+    scope: ['Triagem por IA e Agentes Especialistas', 'Integração HL7/FHIR', 'Segurança LGPD']
   }
 ];
 
@@ -705,7 +758,8 @@ function getInitialData(): DatabaseSchema {
     governance,
     finances,
     auditLogs: [genesisLog],
-    sessions: []
+    sessions: [],
+    projects: INITIAL_PROJECTS
   };
 }
 
@@ -740,10 +794,11 @@ class Database {
           governance: parsed.governance || initial.governance,
           finances: parsed.finances || initial.finances,
           auditLogs: parsed.auditLogs || initial.auditLogs,
-          sessions: parsed.sessions || []
+          sessions: parsed.sessions || [],
+          projects: (parsed.projects && parsed.projects.length > 0) ? parsed.projects : initial.projects
         };
 
-        // Ensure Master Owner exists with Alifermadeiro@hotmail.com
+        // Ensure Master Owner exists with Alifermadeiro@hotmail.com and alifer.qualicare@gmail.com
         const masterExists = this.data.users.find(u => u.email.toLowerCase() === 'alifermadeiro@hotmail.com');
         if (!masterExists) {
           const masterAuth = hashPassword('ShefaAyin2026!');
@@ -754,6 +809,20 @@ class Database {
             role: 'MASTER_OWNER',
             passwordHash: masterAuth.hash,
             salt: masterAuth.salt,
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        const qualicareExists = this.data.users.find(u => u.email.toLowerCase() === 'alifer.qualicare@gmail.com');
+        if (!qualicareExists) {
+          const qualicareAuth = hashPassword('ShefaAyin2026!');
+          this.data.users.push({
+            id: 'user_master_owner_qualicare',
+            email: 'alifer.qualicare@gmail.com',
+            name: 'Alifer Madeiro (Master Owner)',
+            role: 'MASTER_OWNER',
+            passwordHash: qualicareAuth.hash,
+            salt: qualicareAuth.salt,
             createdAt: new Date().toISOString()
           });
         }

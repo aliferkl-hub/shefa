@@ -8,7 +8,7 @@
       "passwordHash": "84591469d698cd1e19bcd074e1bbea808591b3ed85dc4612346f48da7573b02945d8820b0052d27aa02f648a72d03436bbb2da329ecc7ce0531a78a1d838e263",
       "salt": "c0b0db5cb5aa24b722bce4d085419b55",
       "createdAt": "2026-10-31T09:32:40.699Z",
-      "lastLogin": "2026-10-31T21:33:39.548Z"
+      "lastLogin": "2026-11-02T12:38:03.119Z"
     },
     {
       "id": "user_client_vertice",
@@ -30,6 +30,16 @@
       "passwordHash": "d3c7a3aa900f0de4a4133b96f186fd8c42f84d1ed0d55d80f16509d5847b6276e83507a7f9d8af6188d04a27d18894a76ebcaf46391ec5ef453836fbde405b0b",
       "salt": "86cc0086c4109582857cb996ba40e147",
       "createdAt": "2026-10-31T09:32:40.699Z"
+    },
+    {
+      "id": "user_master_owner_qualicare",
+      "email": "alifer.qualicare@gmail.com",
+      "name": "Alifer Madeiro (Master Owner)",
+      "role": "MASTER_OWNER",
+      "passwordHash": "6e8cac35605232ed59956595fc7febf067838baff10a181a0770defc942f87a1330000b3d09e3c33999ceb7226f1cf1733c04e4c26c2855413a8107e430d0b0e",
+      "salt": "07bdbf42bac1488b75c018b1d8b112a6",
+      "createdAt": "2026-11-02T12:45:23.936Z",
+      "lastLogin": "2026-11-02T13:22:19.337Z"
     }
   ],
   "companies": [
@@ -74,6 +84,28 @@
         "maxAgents": 5,
         "maxKnowledgeDocs": 25
       }
+    },
+    {
+      "id": "comp_1793625689090_4ii1",
+      "name": "Alpha Solucoes",
+      "tradeName": "Alpha Solucoes",
+      "cnpjOrTaxId": "00.000.000/0001-00",
+      "plan": "Astral Starter",
+      "status": "active",
+      "createdAt": "2026-11-02T13:21:29.090Z",
+      "aiPersona": {
+        "assistantName": "Ayin Empresa",
+        "tone": "Consultivo, corporativo e focado em alta conversão",
+        "welcomeMessage": "Olá! Sou a inteligência corporativa dedicada da Alpha Solucoes.",
+        "instructions": "Conduzir atendimento comercial e acelerar as operações da empresa."
+      },
+      "quotas": {
+        "monthlyMissions": 150,
+        "usedMissions": 0,
+        "maxAgents": 3,
+        "maxKnowledgeDocs": 15
+      },
+      "subscriptionId": "sub_1793625695937_hkrk"
     }
   ],
   "agents": [
@@ -87,12 +119,12 @@
       "role": "Varredura Contínua de Oportunidades",
       "specialty": "Mapeamento de empresas corporativas com demanda para soluções da SHEFA AYIN",
       "autonomyLevel": "autonomous_safe",
-      "status": "analyzing",
+      "status": "idle",
       "is24hEnabled": true,
       "isManuallyPaused": false,
-      "totalMissionsCompleted": 341,
+      "totalMissionsCompleted": 342,
       "accuracyScore": 98,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_lead_02",
@@ -104,12 +136,12 @@
       "role": "Qualificação & Estruturação de Contatos",
       "specialty": "Segmentação de leads corporativos, enriquecimento de dados e pontuação de fit",
       "autonomyLevel": "autonomous_safe",
-      "status": "running",
+      "status": "idle",
       "is24hEnabled": true,
       "isManuallyPaused": false,
-      "totalMissionsCompleted": 452,
+      "totalMissionsCompleted": 453,
       "accuracyScore": 97,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_sales_03",
@@ -126,7 +158,7 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 520,
       "accuracyScore": 97,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_customer_04",
@@ -143,7 +175,7 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 885,
       "accuracyScore": 99,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_marketing_05",
@@ -160,7 +192,7 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 290,
       "accuracyScore": 95,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_creative_06",
@@ -177,7 +209,7 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 412,
       "accuracyScore": 96,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_market_07",
@@ -211,7 +243,7 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 388,
       "accuracyScore": 100,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_sub_09",
@@ -228,7 +260,7 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 610,
       "accuracyScore": 99,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_analytics_10",
@@ -240,12 +272,12 @@
       "role": "Otimização Comercial & Operacional",
       "specialty": "Identificação de melhorias no funil de conversão e eficiência dos agentes",
       "autonomyLevel": "full_autonomous",
-      "status": "running",
+      "status": "idle",
       "is24hEnabled": true,
       "isManuallyPaused": false,
-      "totalMissionsCompleted": 672,
+      "totalMissionsCompleted": 674,
       "accuracyScore": 99,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     },
     {
       "id": "agent_report_11",
@@ -262,10 +294,140 @@
       "isManuallyPaused": false,
       "totalMissionsCompleted": 430,
       "accuracyScore": 98,
-      "lastActive": "2026-10-31T21:33:41.605Z"
+      "lastActive": "2026-11-02T13:23:02.212Z"
     }
   ],
   "missions": [
+    {
+      "id": "mis_1793623535670_4zgo4",
+      "companyId": "global",
+      "creatorEmail": "alifer.qualicare@gmail.com",
+      "title": "Missão: Mapear expansão de clientes B2B",
+      "objective": "Orquestração de diretriz estratégica: \"Mapear expansão de clientes B2B\" com distribuição modular entre departamentos especializados.",
+      "priority": "medium",
+      "status": "completed",
+      "departmentsInvolved": [
+        "AYIN_STRATEGY",
+        "AYIN_SALES"
+      ],
+      "isSensitive": false,
+      "steps": [
+        {
+          "id": "step_1",
+          "title": "Etapa 1: Desdobramento tático em STRATEGY",
+          "departmentId": "AYIN_STRATEGY",
+          "status": "completed",
+          "result": "Relatório de Execução (Analytics Strategist): Análise de conformidade e desdobramento tático concluídos para Etapa 1: Desdobramento tático em STRATEGY."
+        },
+        {
+          "id": "step_2",
+          "title": "Etapa 2: Desdobramento tático em SALES",
+          "departmentId": "AYIN_SALES",
+          "status": "completed",
+          "result": "Relatório de Execução (Lead Organizer): Análise de conformidade e desdobramento tático concluídos para Etapa 2: Desdobramento tático em SALES."
+        }
+      ],
+      "executionLogs": [
+        {
+          "timestamp": "2026-11-02T12:45:35.670Z",
+          "agentName": "AYIN CORE Director",
+          "message": "Comando mestre interpretado. Missão decomposta em 2 etapas estratégicas.",
+          "type": "info"
+        },
+        {
+          "timestamp": "2026-11-02T13:19:10.185Z",
+          "agentName": "AYIN CORE Director",
+          "message": "Missão iniciada em background contínuo. Despachando tarefas à rede de agentes.",
+          "type": "action"
+        },
+        {
+          "timestamp": "2026-11-02T13:19:12.480Z",
+          "agentName": "Analytics Strategist",
+          "message": "Etapa cumprida: Etapa 1: Desdobramento tático em STRATEGY.",
+          "type": "success"
+        },
+        {
+          "timestamp": "2026-11-02T13:19:21.848Z",
+          "agentName": "Lead Organizer",
+          "message": "Etapa cumprida: Etapa 2: Desdobramento tático em SALES.",
+          "type": "success"
+        },
+        {
+          "timestamp": "2026-11-02T13:19:21.848Z",
+          "agentName": "Analytics Strategist",
+          "message": "Resultados indexados e integrados à inteligência operacional para aprendizado contínuo.",
+          "type": "info"
+        }
+      ],
+      "createdAt": "2026-11-02T12:45:35.670Z",
+      "updatedAt": "2026-11-02T13:19:21.848Z",
+      "finalReport": "Missão executada integralmente. Todas as 2 etapas cumpridas com validação nos departamentos: AYIN_STRATEGY, AYIN_SALES."
+    },
+    {
+      "id": "mis_1793623084555_n2jbq",
+      "companyId": "global",
+      "creatorEmail": "Alifermadeiro@hotmail.com",
+      "title": "Missão: Mapear mercado",
+      "objective": "Orquestração de diretriz estratégica: \"Mapear mercado\" com distribuição modular entre departamentos especializados.",
+      "priority": "medium",
+      "status": "completed",
+      "departmentsInvolved": [
+        "AYIN_STRATEGY",
+        "AYIN_RADAR"
+      ],
+      "isSensitive": false,
+      "steps": [
+        {
+          "id": "step_1",
+          "title": "Etapa 1: Desdobramento tático em STRATEGY",
+          "departmentId": "AYIN_STRATEGY",
+          "status": "completed",
+          "result": "Relatório de Execução (Analytics Strategist): Análise de conformidade e desdobramento tático concluídos para Etapa 1: Desdobramento tático em STRATEGY."
+        },
+        {
+          "id": "step_2",
+          "title": "Etapa 2: Desdobramento tático em RADAR",
+          "departmentId": "AYIN_RADAR",
+          "status": "completed",
+          "result": "Relatório de Execução (Radar Sentinel): Análise de conformidade e desdobramento tático concluídos para Etapa 2: Desdobramento tático em RADAR."
+        }
+      ],
+      "executionLogs": [
+        {
+          "timestamp": "2026-11-02T12:38:04.555Z",
+          "agentName": "AYIN CORE Director",
+          "message": "Comando mestre interpretado. Missão decomposta em 2 etapas estratégicas.",
+          "type": "info"
+        },
+        {
+          "timestamp": "2026-11-02T12:38:04.557Z",
+          "agentName": "AYIN CORE Director",
+          "message": "Missão iniciada em background contínuo. Despachando tarefas à rede de agentes.",
+          "type": "action"
+        },
+        {
+          "timestamp": "2026-11-02T12:38:05.368Z",
+          "agentName": "Analytics Strategist",
+          "message": "Etapa cumprida: Etapa 1: Desdobramento tático em STRATEGY.",
+          "type": "success"
+        },
+        {
+          "timestamp": "2026-11-02T12:38:13.870Z",
+          "agentName": "Radar Sentinel",
+          "message": "Etapa cumprida: Etapa 2: Desdobramento tático em RADAR.",
+          "type": "success"
+        },
+        {
+          "timestamp": "2026-11-02T12:38:13.870Z",
+          "agentName": "Analytics Strategist",
+          "message": "Resultados indexados e integrados à inteligência operacional para aprendizado contínuo.",
+          "type": "info"
+        }
+      ],
+      "createdAt": "2026-11-02T12:38:04.556Z",
+      "updatedAt": "2026-11-02T12:38:13.870Z",
+      "finalReport": "Missão executada integralmente. Todas as 2 etapas cumpridas com validação nos departamentos: AYIN_STRATEGY, AYIN_RADAR."
+    },
     {
       "id": "mis_1793439181733_bnxdt",
       "companyId": "global",
@@ -451,6 +613,20 @@
   ],
   "leads": [
     {
+      "id": "lead_1793621705654_sfvr",
+      "companyId": "Titan Corp",
+      "name": "Gabriel Miranda",
+      "email": "gabriel@titan.com",
+      "phone": "11988887777",
+      "source": "Atendimento Ayin",
+      "stage": "Qualificado",
+      "value": 45000,
+      "notes": "Projeto ERP Mobile de Alta Escala | Lead qualificado automaticamente pelo Lead Organizer com base no perfil corporativo.",
+      "assignedAgent": "Ayin Sales Hunter",
+      "createdAt": "2026-11-02T12:15:05.654Z",
+      "lastContact": "2026-11-02T12:37:17.328Z"
+    },
+    {
       "id": "lead_101",
       "companyId": "comp_vertice_tech",
       "name": "Dra. Carolina Mendonça",
@@ -548,6 +724,51 @@
     }
   ],
   "subscriptions": [
+    {
+      "id": "sub_1793625695937_hkrk",
+      "companyId": "comp_1793625689090_4ii1",
+      "companyName": "Alpha Solucoes",
+      "customerEmail": "contato@alphateste.com",
+      "planTier": "Astral Starter",
+      "billingCycle": "monthly",
+      "status": "ACTIVE",
+      "price": 1990,
+      "startDate": "2026-11-02T13:21:35.944Z",
+      "expiresAt": "2026-12-02T13:21:35.944Z",
+      "pixChargeId": "pix_1793625695937_5l74",
+      "autoRenew": true,
+      "featuresUnlocked": [
+        "Núcleo AYIN CORE integrado",
+        "Até 3 agentes autônomos simultâneos",
+        "150 missões estratégicas/mês",
+        "Funil de vendas e qualificação de leads",
+        "Base de conhecimento privativa (até 15 docs)",
+        "Recebimento e gestão de cobranças Pix"
+      ],
+      "lastPaymentConfirmedAt": "2026-11-02T13:21:35.944Z"
+    },
+    {
+      "id": "sub_1793625689113_9cf6",
+      "companyId": "comp_1793625689090_4ii1",
+      "companyName": "Alpha Solucoes",
+      "customerEmail": "contato@alphateste.com",
+      "planTier": "Astral Starter",
+      "billingCycle": "monthly",
+      "status": "PENDING_PAYMENT",
+      "price": 1990,
+      "startDate": "2026-11-02T13:21:29.090Z",
+      "expiresAt": "2026-12-02T13:21:29.090Z",
+      "pixChargeId": "pix_1793625689113_kw6r",
+      "autoRenew": true,
+      "featuresUnlocked": [
+        "Núcleo AYIN CORE integrado",
+        "Até 3 agentes autônomos simultâneos",
+        "150 missões estratégicas/mês",
+        "Funil de vendas e qualificação de leads",
+        "Base de conhecimento privativa (até 15 docs)",
+        "Recebimento e gestão de cobranças Pix"
+      ]
+    },
     {
       "id": "sub_vertice_001",
       "companyId": "comp_vertice_tech",
@@ -666,6 +887,46 @@
   ],
   "pixCharges": [
     {
+      "id": "pix_1793625695937_5l74",
+      "orderId": "sub_1793625695937_hkrk",
+      "companyId": "comp_1793625689090_4ii1",
+      "customerName": "Empresa Teste Alpha",
+      "customerEmail": "contato@alphateste.com",
+      "customerCpfOrCnpj": "",
+      "planTier": "Astral Starter",
+      "amount": 1990,
+      "pixKey": "11973479473",
+      "pixKeyType": "TELEFONE CELULAR",
+      "recipientName": "Alifer Madeiro",
+      "copyPasteCode": "00020126330014br.gov.bcb.pix01111197347947352040000530398654071990.005802BR5914Alifer Madeiro6009SAO PAULO62170513SHF25695933FL6304BD9A",
+      "qrCodeSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 43 43\" shape-rendering=\"crispEdges\"><path fill=\"#ffffff\" d=\"M0 0h43v43H0z\"/><path stroke=\"#050508\" d=\"M1 1.5h7m2 0h1m2 0h2m7 0h2m2 0h2m1 0h1m1 0h2m2 0h7M1 2.5h1m5 0h1m1 0h2m1 0h1m1 0h2m1 0h2m4 0h2m2 0h3m2 0h2m1 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h2m2 0h5m2 0h1m1 0h3m3 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h5m1 0h1m1 0h2m2 0h1m1 0h2m2 0h2m1 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h1m3 0h1m2 0h1m1 0h1m3 0h1m2 0h2m1 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m7 0h1m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m4 0h1m1 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M10 8.5h4m1 0h4m4 0h2m1 0h3m2 0h1m1 0h1M1 9.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m5 0h2m1 0h2m1 0h1m1 0h1m2 0h2m4 0h1m2 0h1M4 10.5h2m3 0h2m3 0h1m1 0h6m3 0h1m1 0h1m2 0h3m1 0h1m3 0h1m1 0h1M2 11.5h1m1 0h1m2 0h1m1 0h3m3 0h3m2 0h2m6 0h1m6 0h1m1 0h1m1 0h1M1 12.5h3m1 0h2m1 0h1m1 0h1m3 0h2m2 0h1m1 0h2m2 0h1m2 0h1m2 0h2m2 0h3m1 0h1m1 0h2M2 13.5h6m1 0h7m1 0h1m1 0h1m1 0h3m4 0h1m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1M2 14.5h3m3 0h3m1 0h3m2 0h1m2 0h5m2 0h1m1 0h1m2 0h4m1 0h5M1 15.5h1m4 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h4m3 0h1m1 0h2m1 0h1m1 0h1m3 0h2m1 0h2M1 16.5h2m6 0h3m2 0h2m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h4m1 0h2m2 0h1M1 17.5h1m1 0h5m1 0h1m2 0h1m1 0h2m1 0h6m2 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1M1 18.5h2m2 0h2m4 0h1m4 0h2m1 0h2m1 0h2m4 0h2m1 0h1m1 0h2m6 0h1M4 19.5h8m1 0h1m4 0h1m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1M1 20.5h3m1 0h1m2 0h1m3 0h2m1 0h1m1 0h1m3 0h3m3 0h2m1 0h1m1 0h3m5 0h2M2 21.5h1m3 0h2m1 0h1m2 0h1m1 0h1m1 0h2m2 0h2m1 0h4m2 0h3m3 0h2m3 0h2M3 22.5h3m2 0h1m1 0h1m2 0h1m2 0h1m3 0h1m1 0h2m1 0h4m1 0h1m2 0h2m2 0h1m1 0h2M3 23.5h1m1 0h1m1 0h2m4 0h1m5 0h1m2 0h2m2 0h4m1 0h1m2 0h1m1 0h4M2 24.5h1m1 0h2m2 0h2m6 0h2m4 0h3m1 0h2m1 0h4m5 0h2m1 0h1M1 25.5h1m1 0h2m1 0h3m3 0h6m2 0h2m2 0h1m2 0h1m2 0h1m1 0h1m1 0h2m3 0h1m1 0h1M2 26.5h1m3 0h1m2 0h2m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h4m1 0h1m1 0h1M3 27.5h2m1 0h2m1 0h1m1 0h2m1 0h1m5 0h4m3 0h1m2 0h1m2 0h2m3 0h1m1 0h2M3 28.5h1m2 0h1m1 0h3m1 0h2m2 0h1m1 0h3m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1m1 0h1M1 29.5h2m2 0h3m1 0h1m4 0h1m3 0h1m4 0h3m1 0h2m4 0h1m1 0h3m2 0h1M2 30.5h3m1 0h1m5 0h1m2 0h2m3 0h1m2 0h4m1 0h1m1 0h3m2 0h2m2 0h3M1 31.5h1m1 0h2m1 0h2m1 0h1m1 0h1m3 0h5m2 0h4m1 0h1m1 0h7m1 0h1m2 0h2M2 32.5h1m1 0h1m1 0h1m1 0h2m2 0h3m2 0h4m4 0h4m1 0h1m4 0h1m1 0h1m1 0h2M1 33.5h1m1 0h1m2 0h2m2 0h1m4 0h3m1 0h1m1 0h4m1 0h2m1 0h2m1 0h6m1 0h2M9 34.5h1m1 0h1m4 0h1m1 0h3m2 0h5m2 0h1m1 0h2m3 0h1m2 0h2M1 35.5h7m3 0h1m1 0h5m1 0h1m2 0h1m1 0h1m2 0h1m2 0h4m1 0h1m1 0h4M1 36.5h1m5 0h1m4 0h5m1 0h2m1 0h1m4 0h1m2 0h2m2 0h1m3 0h1m3 0h1M1 37.5h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h2m2 0h1m1 0h1m3 0h1m1 0h2m1 0h2m1 0h6m1 0h1M1 38.5h1m1 0h3m1 0h1m3 0h3m1 0h1m3 0h3m4 0h1m2 0h2m3 0h1m1 0h1m3 0h1M1 39.5h1m1 0h3m1 0h1m1 0h1m2 0h5m2 0h5m1 0h4m1 0h2m1 0h1m3 0h1m3 0h1M1 40.5h1m5 0h1m6 0h1m1 0h1m3 0h1m2 0h2m1 0h3m1 0h5m3 0h1M1 41.5h7m1 0h3m2 0h2m1 0h1m3 0h1m5 0h2m1 0h2m3 0h3m1 0h1m1 0h1\"/></svg>\n",
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-02T13:21:35.933Z",
+      "expiresAt": "2026-11-02T13:51:35.933Z",
+      "txId": "SHF25695933FL",
+      "confirmedAt": "2026-11-02T13:21:35.944Z",
+      "endToEndId": "E119734794731793625695944"
+    },
+    {
+      "id": "pix_1793625689113_kw6r",
+      "orderId": "sub_1793625689113_9cf6",
+      "companyId": "comp_1793625689090_4ii1",
+      "customerName": "Empresa Teste Alpha",
+      "customerEmail": "contato@alphateste.com",
+      "customerCpfOrCnpj": "",
+      "planTier": "Astral Starter",
+      "amount": 1990,
+      "pixKey": "11973479473",
+      "pixKeyType": "TELEFONE CELULAR",
+      "recipientName": "Alifer Madeiro",
+      "copyPasteCode": "00020126330014br.gov.bcb.pix01111197347947352040000530398654071990.005802BR5914Alifer Madeiro6009SAO PAULO62170513SHF25689090MP6304455C",
+      "qrCodeSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 43 43\" shape-rendering=\"crispEdges\"><path fill=\"#ffffff\" d=\"M0 0h43v43H0z\"/><path stroke=\"#050508\" d=\"M1 1.5h7m2 0h2m1 0h5m3 0h1m4 0h1m1 0h1m1 0h4m1 0h7M1 2.5h1m5 0h1m2 0h1m2 0h3m1 0h1m1 0h2m2 0h1m1 0h1m1 0h5m1 0h1m1 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m4 0h1m3 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h4m2 0h3m2 0h1m1 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h5m1 0h1m1 0h1m2 0h3m2 0h1m2 0h1m3 0h1m2 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h1m2 0h4m1 0h1m1 0h3m3 0h1m2 0h1m1 0h4m1 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h3m2 0h4m1 0h2m2 0h1m1 0h1m1 0h2m1 0h1m1 0h2M1 9.5h1m1 0h5m3 0h2m1 0h4m2 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h3m1 0h5M1 10.5h2m1 0h1m1 0h1m1 0h3m1 0h2m2 0h2m3 0h1m2 0h1m1 0h2m6 0h1m1 0h2m2 0h1M2 11.5h2m1 0h1m1 0h1m12 0h1m1 0h2m3 0h1m1 0h1m3 0h2m2 0h1m2 0h2M1 12.5h3m1 0h2m3 0h1m1 0h2m1 0h1m3 0h1m1 0h1m3 0h3m4 0h1m1 0h2m1 0h1m2 0h2M1 13.5h1m5 0h1m4 0h3m1 0h1m2 0h1m7 0h1m1 0h1m1 0h1m2 0h1m2 0h1m2 0h1M1 14.5h4m4 0h2m1 0h2m4 0h2m1 0h3m1 0h8m1 0h3m2 0h3M1 15.5h1m1 0h5m2 0h1m4 0h3m1 0h2m2 0h1m2 0h3m2 0h2m1 0h2m1 0h3M6 16.5h1m1 0h4m1 0h1m1 0h1m1 0h1m2 0h2m3 0h1m2 0h1m4 0h1m1 0h1m1 0h3M1 17.5h1m4 0h2m2 0h2m2 0h1m1 0h1m1 0h3m2 0h1m1 0h1m2 0h3m1 0h1m1 0h1m2 0h1m1 0h3M5 18.5h1m2 0h1m2 0h4m1 0h3m3 0h5m1 0h2m2 0h3m1 0h3m2 0h1M3 19.5h1m2 0h3m1 0h1m2 0h6m1 0h3m2 0h6m3 0h3m2 0h3M3 20.5h1m1 0h2m3 0h2m2 0h1m2 0h10m1 0h1m4 0h2m1 0h3m1 0h2M2 21.5h2m1 0h3m1 0h1m1 0h2m1 0h1m5 0h1m1 0h1m1 0h2m1 0h2m1 0h2m1 0h2m1 0h1m2 0h1M1 22.5h2m1 0h3m2 0h4m1 0h1m1 0h1m1 0h2m2 0h3m2 0h2m2 0h4m1 0h1m1 0h3M7 23.5h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m4 0h1m4 0h1m1 0h1m1 0h4m1 0h2M1 24.5h1m2 0h3m1 0h1m3 0h3m1 0h5m1 0h2m1 0h1m1 0h1m1 0h1m6 0h2m1 0h1m1 0h1M1 25.5h1m3 0h10m5 0h1m1 0h3m3 0h3m1 0h2m6 0h1M8 26.5h3m2 0h3m1 0h2m3 0h1m2 0h3m1 0h2m1 0h4m1 0h1m2 0h1M6 27.5h2m2 0h1m1 0h1m1 0h4m2 0h1m7 0h3m4 0h1m2 0h2M2 28.5h2m5 0h2m3 0h1m1 0h1m5 0h5m4 0h1m2 0h1m2 0h1m2 0h1M1 29.5h4m1 0h2m2 0h2m1 0h4m1 0h1m2 0h2m1 0h2m3 0h1m6 0h2m1 0h1m1 0h1M1 30.5h1m1 0h2m3 0h1m3 0h1m1 0h6m3 0h1m4 0h1m4 0h3m1 0h5M1 31.5h1m3 0h3m2 0h1m1 0h1m3 0h4m1 0h1m2 0h2m2 0h1m1 0h2m1 0h1m3 0h1m1 0h1M1 32.5h1m2 0h1m4 0h1m7 0h1m6 0h1m2 0h2m2 0h1m1 0h1m1 0h2m1 0h3M1 33.5h1m2 0h4m1 0h1m1 0h2m6 0h1m4 0h1m1 0h1m1 0h1m1 0h1m2 0h5m3 0h1M9 34.5h6m1 0h1m6 0h1m3 0h1m3 0h1m1 0h1m3 0h2m1 0h2M1 35.5h7m3 0h1m1 0h3m3 0h1m1 0h1m1 0h2m3 0h6m1 0h1m1 0h2m2 0h1M1 36.5h1m5 0h1m1 0h1m1 0h1m4 0h1m3 0h2m2 0h2m3 0h1m1 0h3m3 0h2m2 0h1M1 37.5h1m1 0h3m1 0h1m1 0h4m2 0h1m1 0h1m1 0h1m2 0h2m1 0h1m3 0h3m1 0h7m1 0h1M1 38.5h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h2m2 0h1m2 0h1m2 0h2m3 0h1m1 0h2m1 0h1m2 0h2m1 0h1M1 39.5h1m1 0h3m1 0h1m1 0h6m2 0h1m1 0h2m4 0h2m2 0h3m2 0h2m1 0h1m1 0h2M1 40.5h1m5 0h1m4 0h2m2 0h1m1 0h2m3 0h1m1 0h1m1 0h2m4 0h2m1 0h2M1 41.5h7m1 0h1m4 0h1m1 0h1m5 0h2m5 0h3m1 0h2m1 0h2m2 0h1\"/></svg>\n",
+      "status": "PENDING",
+      "createdAt": "2026-11-02T13:21:29.090Z",
+      "expiresAt": "2026-11-02T13:51:29.090Z",
+      "txId": "SHF25689090MP"
+    },
+    {
       "id": "pix_initial_01",
       "orderId": "ord_2026_01",
       "companyId": "comp_vertice_tech",
@@ -709,6 +970,15 @@
     "spendingLimit": 1000
   },
   "finances": [
+    {
+      "id": "fin_1793625695944_wvyj",
+      "companyId": "comp_1793625689090_4ii1",
+      "title": "Liquidação Pix (Homologação): Astral Starter (Empresa Teste Alpha)",
+      "type": "assinatura",
+      "amount": 1990,
+      "date": "2026-11-02",
+      "status": "liquidado"
+    },
     {
       "id": "fin_001",
       "companyId": "global",
@@ -856,6 +1126,206 @@
       "companyId": "global",
       "details": "Pausa Geral de Emergência (Kill-Switch) do Master Owner: DESATIVADA",
       "hash": "b0a8e7ca79d2a047a87c67254b5026ded8e2ac2afeeb53f645f8893e029d1d7b"
+    },
+    {
+      "id": "audit_1793621290774_u1af",
+      "timestamp": "2026-11-02T12:08:10.774Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "148e0de550b5c6b522c5548b70718b42fc2338d8145e3e197912df794339f36a"
+    },
+    {
+      "id": "audit_1793621698282_uq3g",
+      "timestamp": "2026-11-02T12:14:58.282Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "d333d00f95fc76d445987872dee7905d7f62b091416c2856368061d39b763af1"
+    },
+    {
+      "id": "audit_1793621701391_c2bp",
+      "timestamp": "2026-11-02T12:15:01.390Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "e95282fed71dbe25db3f93114d3adac4e635dfaffd4054e3bb856f511c15e5d7"
+    },
+    {
+      "id": "audit_1793621705636_sn1g",
+      "timestamp": "2026-11-02T12:15:05.636Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "4e909927a8724a102d2cff3012cffd5fb5c7db711eae203a7d74d382fc9b86c0"
+    },
+    {
+      "id": "audit_1793623037328_da2f",
+      "timestamp": "2026-11-02T12:37:17.328Z",
+      "actorEmail": "lead.agent@shefa-ayin.io",
+      "actorRole": "OPERATOR",
+      "action": "LEAD_QUALIFIED",
+      "companyId": "Titan Corp",
+      "details": "Lead Gabriel Miranda qualificado automaticamente no funil comercial.",
+      "hash": "21a19c2f5bdabc58f392a7aba6167335821c2c93445f9d3fc88a1a578c67e455"
+    },
+    {
+      "id": "audit_1793623083119_ddiq",
+      "timestamp": "2026-11-02T12:38:03.119Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "319414e4da0f09e8723209689a785ed101b3e75bbb668f06a6e2bc70822cc27c"
+    },
+    {
+      "id": "audit_1793623084556_b3zb",
+      "timestamp": "2026-11-02T12:38:04.556Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "COMMAND_DISPATCHED",
+      "companyId": "global",
+      "details": "Comando: \"Mapear mercado\". Missão criada: mis_1793623084555_n2jbq. Sensível: false",
+      "hash": "970f2b06519b6af3574766bb1ce3d377cbb86b7a9da7add46a3ca6b330f731c6"
+    },
+    {
+      "id": "audit_1793623093870_t46a",
+      "timestamp": "2026-11-02T12:38:13.870Z",
+      "actorEmail": "Alifermadeiro@hotmail.com",
+      "actorRole": "OPERATOR",
+      "action": "MISSION_COMPLETED",
+      "companyId": "global",
+      "details": "Missão \"Missão: Mapear mercado\" finalizada com sucesso.",
+      "hash": "29e5c119ac20fbf817240952ce14c099786396f89bc617533eed8632af577742"
+    },
+    {
+      "id": "audit_1793623529634_p25o",
+      "timestamp": "2026-11-02T12:45:29.634Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "3783331bca0a08bbe5562d203c974cce0ffd7a56e74827fce989384ec9faa4c2"
+    },
+    {
+      "id": "audit_1793623533468_esz9",
+      "timestamp": "2026-11-02T12:45:33.468Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "626e4c7a26f26cbec253b8fe1d414ac04e7b7ef67da4de9acaaf3bd8f766f4eb"
+    },
+    {
+      "id": "audit_1793623535671_yryq",
+      "timestamp": "2026-11-02T12:45:35.671Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "COMMAND_DISPATCHED",
+      "companyId": "global",
+      "details": "Comando: \"Mapear expansão de clientes B2B\". Missão criada: mis_1793623535670_4zgo4. Sensível: false",
+      "hash": "8038154ecc82d960da7248f286bbe8eb48c262b3de1d887862455ac3316124c8"
+    },
+    {
+      "id": "audit_1793625561848_dj8e",
+      "timestamp": "2026-11-02T13:19:21.848Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "OPERATOR",
+      "action": "MISSION_COMPLETED",
+      "companyId": "global",
+      "details": "Missão \"Missão: Mapear expansão de clientes B2B\" finalizada com sucesso.",
+      "hash": "1e6e8d88014676845806e080944aa20935ae7974686c1e533b5624e82acacdaf"
+    },
+    {
+      "id": "audit_1793625647617_b0gi",
+      "timestamp": "2026-11-02T13:20:47.617Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "b857e9a68121244310568d3316dc958ac41a61f30dd2c5d4ac0299efa3c7ebe9"
+    },
+    {
+      "id": "audit_1793625689070_ezbw",
+      "timestamp": "2026-11-02T13:21:29.070Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "d71084e017cb704cc3d84067021d592bf280becf18dd9dba076334f827df2f71"
+    },
+    {
+      "id": "audit_1793625689115_ujsg",
+      "timestamp": "2026-11-02T13:21:29.115Z",
+      "actorEmail": "contato@alphateste.com",
+      "actorRole": "OPERATOR",
+      "action": "SUBSCRIPTION_CHECKOUT",
+      "companyId": "comp_1793625689090_4ii1",
+      "details": "Cobrança Pix de R$ 1990.00 gerada para o plano Astral Starter (monthly). TxID: SHF25689090MP",
+      "hash": "e7f000e0daa48569e8da78a4bc6df9de001fd5a8d38a6d9dfeca2bf2a62bf315"
+    },
+    {
+      "id": "audit_1793625695917_1bqy",
+      "timestamp": "2026-11-02T13:21:35.917Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "b01e4661711986dfca90eb093afc8b3b27c1a8d7b6eed361d2d3fe5fc6cd58e7"
+    },
+    {
+      "id": "audit_1793625695938_7en3",
+      "timestamp": "2026-11-02T13:21:35.937Z",
+      "actorEmail": "contato@alphateste.com",
+      "actorRole": "OPERATOR",
+      "action": "SUBSCRIPTION_CHECKOUT",
+      "companyId": "comp_1793625689090_4ii1",
+      "details": "Cobrança Pix de R$ 1990.00 gerada para o plano Astral Starter (monthly). TxID: SHF25695933FL",
+      "hash": "e9fb5ca6e15da79e0aea254a36bd74dcc2785c23411badd47e3dc6d3517fec34"
+    },
+    {
+      "id": "audit_1793625695944_5pjt",
+      "timestamp": "2026-11-02T13:21:35.944Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "PIX_HOMOLOGATION_CONFIRMED",
+      "companyId": "comp_1793625689090_4ii1",
+      "details": "Pagamento Pix de R$ 1990.00 liquidado via homologação do Master Owner.",
+      "hash": "9a95bbcce61fd532ff286f527dac4bb954bfa91914318c98770f6a93ca7f5f82"
+    },
+    {
+      "id": "audit_1793625723157_oys0",
+      "timestamp": "2026-11-02T13:22:03.157Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "2bf4bb33fa9cd69c5107eabcb4a8458a8289e5ea2ff083a980b354196efd1d49"
+    },
+    {
+      "id": "audit_1793625739338_v3a5",
+      "timestamp": "2026-11-02T13:22:19.338Z",
+      "actorEmail": "alifer.qualicare@gmail.com",
+      "actorRole": "MASTER_OWNER",
+      "action": "USER_LOGIN",
+      "companyId": "global",
+      "details": "Login realizado com sucesso.",
+      "hash": "39c666ed4710ec6df81145eeab56d5359a133076fa1687537eaedbaee710048d"
     }
   ],
   "sessions": [
@@ -878,6 +1348,66 @@
       "token": "09672b42ddc64777b8b4cfd39e41e3de9f6ca3b679528f4a0f03efeface9c2e1",
       "userId": "user_master_owner",
       "expiresAt": "2026-11-07T21:33:39.548Z"
+    },
+    {
+      "token": "94fe79781a0e0aef95cbe300cf3c9cc9533a20f3b4a3fe13f65d5f2e4d9cc578",
+      "userId": "user_master_owner",
+      "expiresAt": "2026-11-09T12:08:10.773Z"
+    },
+    {
+      "token": "5b02a4eb9b3a2ed685a26f695c327177d549421d0fd81f10d52f824abde8f1d9",
+      "userId": "user_master_owner",
+      "expiresAt": "2026-11-09T12:14:58.282Z"
+    },
+    {
+      "token": "8efc30ebe35764cb95eabfab852f32e907905760c966a690ff0a03a09393e2d8",
+      "userId": "user_master_owner",
+      "expiresAt": "2026-11-09T12:15:01.390Z"
+    },
+    {
+      "token": "018cda8ed46a5e2a7b3e22283ed71fed9e6e3c42a5335aed296b191716dbfd08",
+      "userId": "user_master_owner",
+      "expiresAt": "2026-11-09T12:15:05.636Z"
+    },
+    {
+      "token": "05bc2c20f95eac33c2e0a0dcb3ee46f0be59f0e30911e73f04c19e3dd4382e33",
+      "userId": "user_master_owner",
+      "expiresAt": "2026-11-09T12:38:03.119Z"
+    },
+    {
+      "token": "3eec3aba52e299a0e28fe9aae8b71d3c4ade3bdf033bee37d5f019baebdeb3d9",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T12:45:29.633Z"
+    },
+    {
+      "token": "11fdfbb266fffa59e11aa69ca3fd66ba4100a492e8150a6ee5ef25c2131e52c4",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T12:45:33.468Z"
+    },
+    {
+      "token": "e6cb1fc7ae3f646d242b3e3284df6b568dd29fa464023db13831fb9d78a7aa89",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T13:20:47.616Z"
+    },
+    {
+      "token": "cadd05797b437f04fa2df9b7615035708959723021c56dc064fbf74995000233",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T13:21:29.069Z"
+    },
+    {
+      "token": "b89bc5389b3e45665a9a250546f106a54dea83d41fe8f4a1472a782437b19bd1",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T13:21:35.916Z"
+    },
+    {
+      "token": "a2d520e729dac5dbe1d6ec3505f8727ca8cb8688823ee6ddb9070a767f13b050",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T13:22:03.156Z"
+    },
+    {
+      "token": "d539204d1190697d8fdd4e9a87e642764e37d11c2f7e9b18b9a97b217a492a2c",
+      "userId": "user_master_owner_qualicare",
+      "expiresAt": "2026-11-09T13:22:19.337Z"
     }
   ]
 }

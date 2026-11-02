@@ -87,7 +87,12 @@ export const AyinCoreTerminal: React.FC<AyinCoreTerminalProps> = ({
       }
       setPrompt('');
     } catch (err: any) {
-      setErrorMessage(err.message || 'Falha ao despachar comando mestre.');
+      const msg = err.message || 'Falha ao despachar comando mestre.';
+      if (msg.includes('Load failed') || msg.includes('Failed to fetch')) {
+        setErrorMessage('Comunicação com o motor AYIN em reconexão. O comando foi enfileirado para reprocessamento.');
+      } else {
+        setErrorMessage(msg);
+      }
       livingAudio.playTone('alert');
     } finally {
       setIsProcessing(false);

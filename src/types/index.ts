@@ -316,3 +316,17 @@ export type LivingCoreVisualState =
   | 'ALERTA'
   | 'ERRO'
   | 'DESCONECTADO';
+
+export interface ProjectItem {
+  id: string;
+  name: string;
+  client: string;
+  category: string;
+  contractValue: number;
+  progress: number;
+  stage: 'Planejamento' | 'Desenvolvimento' | 'Homologação' | 'Concluído';
+  deadline: string;
+  assignedAgents: string[];
+  scope: string[];
+  createdAt?: string;
+}
